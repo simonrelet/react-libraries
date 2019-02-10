@@ -50,13 +50,13 @@ Ex: `"style": "build/my-lib.css"`.
 _Usage_:
 
 ```sh
-react-libraries bump-version [-r|--readme <readme-template-path>] <new-verison>
+react-libraries bump-version [-r|--readme templatePath>] <new-verison>
 ```
 
 Update the following files with the new version:
 
 - _package.json_: The `version` field is updated.
-- _CHANGELOG.md_ (if it exists): The `## Unreleased` section is renamed to "\<new-version> (date)".
+- _CHANGELOG.md_ (if it exists): The "Unreleased" section is renamed to "\<new-version> (date)".
 - _README.md_ (if the template file exists): See the [`readme` script](#readme).
 
 ### `clean`
@@ -78,7 +78,7 @@ Remove the folowing generated folders:
 _Usage_:
 
 ```sh
-react-libraries readme [-t|--template <readme-template-path>]
+react-libraries readme [-t|--template templatePath]
 ```
 
 Generate a _README.md_ file from a template.
