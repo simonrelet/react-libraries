@@ -52,7 +52,7 @@ Update the following files with the new version:
 
 - _package.json_: The `version` field is updated.
 - _CHANGELOG.md_ (if it exists): The "Unreleased" section is renamed to "\<new-version> (date)".
-- _README.md_ (if the template file exists): See the [`doc` script](#doc).
+- _README.md_ (if the template file exists): See the [`readme` script](#readme).
 
 ### `clean`
 
@@ -68,16 +68,16 @@ Remove the folowing generated folders:
 - _build-storybook/_
 - _coverage/_
 
-### `doc`
+### `readme`
 
 _Usage_:
 
 ```sh
-react-libraries doc [-r|--readme <readme-template-path>]
+react-libraries readme [-t|--template <readme-template-path>]
 ```
 
-Generate the documentation and the _README.md_ file (if it exists).
-By default, the README template path is _README-template.md_.
+Generate a _README.md_ file from a template.
+By default, the README template path is _README-template.md_ but it can be changed using the `--template` (or `-t`) option.
 
 #### README template
 
@@ -130,7 +130,7 @@ yarn add \\{{name}}
 
 ## Documentation
 
-The documentation can be found [here](\\{{repository.url}}/tree/\\{{version}}/docs).
+The documentation can be found [here]({{repository.url}}/tree/{{version}}/docs).
 ````
 
 _README.md_
@@ -173,16 +173,3 @@ react-libraries test [--coverage]
 ```
 
 Launches Jest in the interactive watch mode.
-
-#### Documentation
-
-The JSDoc in the JavaScript files under the _src/_ folder will be parsed and rendered in a corresponding markdown file under the _docs/_ folder.
-Are excluded the indexes files (_index.js_), test files (_\*.test.js_) and storybook's stories (_\*.stories.js_).
-
-2 parsers are used:
-
-- [react-docgen](https://github.com/reactjs/react-docgen) for React components.
-- [jsdoc-api](https://github.com/jsdoc2md/jsdoc-api) for all other JavaScript files.
-
-It is recommended to only make changes in the sources and not the generated files.
-If you still need to make changes in a generated file, remove the header so it won't be overridden the next time the script is ran.
