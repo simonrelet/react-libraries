@@ -1,8 +1,8 @@
 'use strict'
 
 const chalk = require('chalk')
+const dateFns = require('date-fns')
 const fs = require('fs-extra')
-const moment = require('moment')
 const semver = require('semver')
 const logger = require('../lib/logger')
 const generateReadme = require('../lib/generateReadme')
@@ -19,7 +19,7 @@ function updatePackage(version) {
 
 function updateChangelog(version) {
   if (fs.existsSync(changelogPath)) {
-    const date = moment().format('MMMM D, YYYY')
+    const date = dateFns.format(new Date(), 'MMMM D, YYYY')
     const changelog = fs
       .readFileSync(changelogPath, 'utf8')
       .replace('## Unreleased', `## ${version} (${date})`)

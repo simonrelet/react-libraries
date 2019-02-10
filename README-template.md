@@ -51,7 +51,7 @@ react-libraries bump-version [-r|--readme <readme-template-path>] <new-verison>
 Update the following files with the new version:
 
 - _package.json_: The `version` field is updated.
-- _CHANGELOG.md_ (if it exists): The "Unreleased" section is renamed to "\<new-version> (date)".
+- _CHANGELOG.md_ (if it exists): The `## Unreleased` section is renamed to "\<new-version> (date)".
 - _README.md_ (if the template file exists): See the [`readme` script](#readme).
 
 ### `clean`
