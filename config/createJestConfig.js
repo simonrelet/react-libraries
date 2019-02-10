@@ -10,9 +10,11 @@ function resolve(relativePath) {
 }
 
 function createJestConfig() {
-  const setupTestsFile = fs.existsSync(testsSetupPath)
-    ? `<rootDir>/${testsSetupPath}`
-    : undefined
+  const setupTestsFile = []
+
+  if (fs.existsSync(testsSetupPath)) {
+    setupTestsFile.push(`<rootDir>/${testsSetupPath}`)
+  }
 
   const config = {
     collectCoverageFrom: [
@@ -21,7 +23,7 @@ function createJestConfig() {
       '!src/**/index.js',
     ],
     setupFiles: [require.resolve('regenerator-runtime/runtime')],
-    setupTestFrameworkScriptFile: setupTestsFile,
+    setupFilesAfterEnv: setupTestsFile,
     testMatch: [
       '<rootDir>/src/**/__tests__/**/*.{js,jsx}',
       '<rootDir>/src/**/?(*.)(spec|test).{js,jsx}',
