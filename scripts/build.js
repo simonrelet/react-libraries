@@ -10,20 +10,12 @@ const createBabelConfig = require('../config/createBabelConfig')
 const logger = require('../lib/logger')
 
 const pkg = fs.readJSONSync('package.json')
-const sourceFilesJS = glob.sync('src/**/*.js', {
-  ignore: [
-    '**/*.{spec,test,stories}.js',
-    '**/__tests__/**',
-    '**/__mocks__/**',
-    '**/setupTests.js',
-  ],
-})
 
 function getOutputFileName(outputFolder) {
   return filename => filename.replace(/^src/, outputFolder)
 }
 
-async function buildJS(modulesType, outputFolder) {
+async function buildJS({ sourceFilesJS, modulesType, outputFolder }) {
   const presets = createBabelConfig({ modules: modulesType })
   const outputFilename = getOutputFileName(outputFolder)
 
@@ -51,7 +43,7 @@ async function buildJS(modulesType, outputFolder) {
   return await Promise.all(sourceFilesJS.map(transformFile))
 }
 
-async function copyStyle(filesToCopy, outputFolder) {
+async function copyFiles(filesToCopy, outputFolder) {
   const outputFilename = getOutputFileName(outputFolder)
 
   async function copyFile(filename) {
@@ -61,12 +53,18 @@ async function copyStyle(filesToCopy, outputFolder) {
   return await Promise.all(filesToCopy.map(copyFile))
 }
 
-async function buildModule(modulesType, outputFolder, filesToCopy, moduleName) {
+async function buildModule({
+  sourceFilesJS,
+  modulesType,
+  outputFolder,
+  filesToCopy,
+  moduleName,
+}) {
   try {
-    await buildJS(modulesType, outputFolder)
+    await buildJS({ sourceFilesJS, modulesType, outputFolder })
 
     if (filesToCopy.length) {
-      await copyStyle(filesToCopy, outputFolder)
+      await copyFiles(filesToCopy, outputFolder)
     }
 
     logger.log(chalk.green(`${moduleName} build successful.`))
@@ -76,28 +74,53 @@ async function buildModule(modulesType, outputFolder, filesToCopy, moduleName) {
   }
 }
 
-async function buildModules(filesToCopy) {
+async function buildModules(sourceFilesJS, filesToCopy) {
   if (pkg.main) {
-    await buildModule('commonjs', pkg.main, filesToCopy, 'CommonJS')
+    await buildModule({
+      sourceFilesJS,
+      modulesType: 'commonjs',
+      outputFolder: pkg.main,
+      filesToCopy,
+      moduleName: 'CommonJS',
+    })
   }
 
   if (pkg.module) {
-    await buildModule('es', pkg.module, filesToCopy, 'ES modules')
+    await buildModule({
+      sourceFilesJS,
+      modulesType: 'es',
+      outputFolder: pkg.module,
+      filesToCopy,
+      moduleName: 'ES modules',
+    })
   }
 }
 
-async function safeBuildModules(filesToCopy) {
+async function safeBuildModules(sourceFilesJS, filesToCopy) {
   try {
-    await buildModules(filesToCopy)
+    await buildModules(sourceFilesJS, filesToCopy)
   } catch (_) {}
 }
 
 async function build(args) {
   args = minimist(args, {
-    alias: { copy: 'c', watch: 'w' },
+    alias: { copy: 'c', watch: 'w', ignore: 'i' },
     boolean: '--watch',
-    string: 'copy',
+    string: ['copy', 'ignore'],
   })
+
+  const ignoredFiles = [
+    '**/*.{spec,test,stories}.js',
+    '**/__tests__/**',
+    '**/__mocks__/**',
+    '**/setupTests.js',
+  ]
+
+  if (args.ignore) {
+    ignoredFiles.push(args.ignore)
+  }
+
+  const sourceFilesJS = glob.sync('src/**/*.js', { ignore: ignoredFiles })
 
   let filesToCopy = []
 
@@ -114,10 +137,10 @@ async function build(args) {
 
   if (args.watch) {
     const watcher = chokidar.watch('src/**', { ignoreInitial: true })
-    watcher.on('all', () => safeBuildModules(filesToCopy))
-    safeBuildModules(filesToCopy)
+    watcher.on('all', () => safeBuildModules(sourceFilesJS, filesToCopy))
+    safeBuildModules(sourceFilesJS, filesToCopy)
   } else {
-    buildModules(filesToCopy)
+    buildModules(sourceFilesJS, filesToCopy)
   }
 }
 

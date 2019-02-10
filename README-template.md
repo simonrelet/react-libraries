@@ -26,7 +26,7 @@ yarn add {{name}} -D
 _Usage_:
 
 ```sh
-react-libraries build [-c|--copy globPattern] [-w|--watch]
+react-libraries build [-i|--ignore globPattern] [-c|--copy globPattern] [-w|--watch]
 ```
 
 Build the library JavaScript in CommonJS and ES modules.
