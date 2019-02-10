@@ -1,11 +1,15 @@
 'use strict'
 
+const autoprefixer = require('autoprefixer')
 const babel = require('@babel/core')
 const chalk = require('chalk')
 const chokidar = require('chokidar')
+const cssnano = require('cssnano')
 const fs = require('fs-extra')
 const glob = require('glob')
 const minimist = require('minimist')
+const sass = require('node-sass')
+const postcss = require('postcss')
 const createBabelConfig = require('../config/createBabelConfig')
 const logger = require('../lib/logger')
 
@@ -68,9 +72,12 @@ async function buildModule({
     }
 
     logger.log(chalk.green(`${moduleName} build successful.`))
-  } catch (err) {
-    logger.error(`\n${err.message}\n`, chalk.red(`${moduleName} build failed.`))
-    throw err
+  } catch (error) {
+    logger.error(
+      `\n${error.message}\n`,
+      chalk.red(`${moduleName} build failed.`)
+    )
+    throw error
   }
 }
 
@@ -96,17 +103,54 @@ async function buildModules(sourceFilesJS, filesToCopy) {
   }
 }
 
-async function safeBuildModules(sourceFilesJS, filesToCopy) {
+async function safeBuildModules(...args) {
   try {
-    await buildModules(sourceFilesJS, filesToCopy)
+    await buildModules(...args)
+  } catch (_) {}
+}
+
+function renderSASS(config) {
+  return new Promise((resolve, reject) => {
+    sass.render(config, (error, result) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(result.css.toString())
+      }
+    })
+  })
+}
+
+async function renderPostCSS(css) {
+  const result = await postcss([autoprefixer, cssnano]).process(css, {
+    from: undefined,
+  })
+  return result.css
+}
+
+async function buildStyles(file) {
+  try {
+    let css = await renderSASS({ file, includePaths: ['node_modules'] })
+    css = await renderPostCSS(css)
+    await fs.outputFile(pkg.style, css)
+    logger.log(chalk.green('SASS build successful.'))
+  } catch (error) {
+    logger.error(`\n${error.message}\n`, chalk.red('SASS build failed.'))
+    throw error
+  }
+}
+
+async function safeBuildStyles(...args) {
+  try {
+    await buildStyles(...args)
   } catch (_) {}
 }
 
 async function build(args) {
   args = minimist(args, {
-    alias: { copy: 'c', watch: 'w', ignore: 'i' },
+    alias: { copy: 'c', watch: 'w', ignore: 'i', sass: 's' },
     boolean: '--watch',
-    string: ['copy', 'ignore'],
+    string: ['copy', 'ignore', 'sass'],
   })
 
   const ignoredFiles = [
@@ -135,12 +179,42 @@ async function build(args) {
     }
   }
 
+  const sassInputFile = args.sass || './src/index.scss'
+  const hasSASS = fs.existsSync(sassInputFile)
+
+  if (!pkg.style && hasSASS) {
+    logger.warn(
+      chalk.yellow(
+        `The file ${sassInputFile} can only be built if a package.json#style key is specified.`
+      )
+    )
+  }
+
+  if (pkg.style && !hasSASS) {
+    logger.warn(
+      chalk.yellow(`No ${sassInputFile} file found to build to ${pkg.style}.`)
+    )
+  }
+
+  const hasStyles = pkg.style && hasSASS
+
   if (args.watch) {
-    const watcher = chokidar.watch('src/**', { ignoreInitial: true })
-    watcher.on('all', () => safeBuildModules(sourceFilesJS, filesToCopy))
+    const watchOptions = { ignoreInitial: true }
+    const jsWatcher = chokidar.watch('src/**', watchOptions)
+    jsWatcher.on('all', () => safeBuildModules(sourceFilesJS, filesToCopy))
     safeBuildModules(sourceFilesJS, filesToCopy)
+
+    if (hasStyles) {
+      const styleWatcher = chokidar.watch('src/**/*.scss', watchOptions)
+      styleWatcher.on('all', () => safeBuildStyles(sassInputFile))
+      safeBuildStyles(sassInputFile)
+    }
   } else {
     buildModules(sourceFilesJS, filesToCopy)
+
+    if (hasStyles) {
+      buildStyles(sassInputFile)
+    }
   }
 }
 

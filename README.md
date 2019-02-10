@@ -32,19 +32,24 @@ yarn add @simonrelet/react-libraries -D
 _Usage_:
 
 ```sh
-react-libraries build [-c|--copy globPattern] [-w|--watch]
+react-libraries build [-i|--ignore ignoreGlob] [-c|--copy copyGlob] [-s|--sass sassEntry] [-w|--watch]
 ```
 
 Build the library JavaScript in CommonJS and ES modules.
 
 This script accepts the `--watch` (or `-w`) option in which case it will watch for changes and rebuild.
-An optional pattern of files can be passed in order to copy them to the output folders.
+An optional [glob](https://www.npmjs.com/package/glob) pattern of files can be passed in order to copy them to the output folders.
+The SASS entry point is by default _src/index.scss_ but can be changed using the `--sass` (or `-s`) option.
+By default files ending with _.spec.js_, _.test.js_ _.stories.js_, all files under a <em>\_\_tests\_\_</em> or <em>\_\_mocks\_\_</em> folder and _setupTests.js_ are ignored.
 
 In order to build in CommonJS the entry _package.json#main_ must point to the output folder.
 Ex: `"main": "build/cjs"`.
 
 In order to build in ES modules the entry _package.json#module_ must point to the output folder.
 Ex: `"module": "build/es"`.
+
+In order to build SASS styles the entry _package.json#style_ must point to the output file.
+Ex: `"style": "build/my-lib.css"`.
 
 ### `bump-version`
 
@@ -57,8 +62,8 @@ react-libraries bump-version [-r|--readme <readme-template-path>] <new-verison>
 Update the following files with the new version:
 
 - _package.json_: The `version` field is updated.
-- _CHANGELOG.md_ (if it exists): The "Unreleased" section is renamed to "\<new-version> (date)".
-- _README.md_ (if the template file exists): See the [`doc` script](#doc).
+- _CHANGELOG.md_ (if it exists): The `## Unreleased` section is renamed to "\<new-version> (date)".
+- _README.md_ (if the template file exists): See the [`readme` script](#readme).
 
 ### `clean`
 
