@@ -171,32 +171,32 @@ _package.json_
 _README-template.md_
 
 ````md
-# {{!name}}
+# {{name}}
 
-{{!description}}
+{{description}}
 
 ## Installation
 
 ### npm
 
 ```sh
-npm install --save {{!name}}
+npm install --save {{name}}
 ```
 
 ### yarn
 
 ```sh
-yarn add {{!name}}
+yarn add {{name}}
 ```
 
 ### UMD
 
-- Production: https://unpkg.com/{{!name}}@{{!version}} or https://unpkg.com/{{!name}}@{{!version}}/{{!unpkg}}
-- Development: https://unpkg.com/{{!name}}@{{!version}}/{{!unpkg-dev}}
+- Production: https://unpkg.com/{{name}}@{{version}} or https://unpkg.com/{{name}}@{{version}}/{{unpkg}}
+- Development: https://unpkg.com/{{name}}@{{version}}/{{unpkg-dev}}
 
 ## Documentation
 
-The documentation can be found [here]({{!repository.url}}/tree/{{!version}}/docs).
+The documentation can be found [here]({{repository.url}}/tree/{{version}}/docs).
 ````
 
 _README.md_

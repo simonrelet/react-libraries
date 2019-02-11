@@ -185,8 +185,8 @@ yarn add {{!name}}
 
 ### UMD
 
-- Production: https://unpkg.com/{{!name}}@{{!version}} or https://unpkg.com/{{!name}}@{{!version}}/{{!unpkg}}
-- Development: https://unpkg.com/{{!name}}@{{!version}}/{{!unpkg-dev}}
+- Production: https://unpkg.com/{{!name}}@{{!version}} or https://unpkg.com/{{!name}}@{{!version}}/{{unpkg}}
+- Development: https://unpkg.com/{{!name}}@{{!version}}/{{unpkg-dev}}
 
 ## Documentation
 
