@@ -6,17 +6,31 @@ const chalk = require('chalk')
 const chokidar = require('chokidar')
 const cssnano = require('cssnano')
 const fs = require('fs-extra')
-const glob = require('glob')
+const globCB = require('glob')
 const minimist = require('minimist')
 const sass = require('node-sass')
 const postcss = require('postcss')
 const createBabelConfig = require('../config/createBabelConfig')
 const logger = require('../lib/logger')
 
-const pkg = fs.readJSONSync('package.json')
-
 function getOutputFileName(outputFolder) {
   return filename => filename.replace(/^src/, outputFolder)
+}
+
+function ensureArray(object) {
+  return Array.isArray(object) ? object : [object]
+}
+
+function glob(...args) {
+  return new Promise((resolve, reject) => {
+    globCB(...args, (error, files) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve(files)
+      }
+    })
+  })
 }
 
 async function buildJS({ sourceFilesJS, modulesType, outputFolder }) {
@@ -81,7 +95,7 @@ async function buildModule({
   }
 }
 
-async function buildModules(sourceFilesJS, filesToCopy) {
+async function buildModules({ sourceFilesJS, filesToCopy, pkg }) {
   if (pkg.main) {
     await buildModule({
       sourceFilesJS,
@@ -128,9 +142,12 @@ async function renderPostCSS(css) {
   return result.css
 }
 
-async function buildStyles(file) {
+async function buildStyles({ sassInputFile, pkg }) {
   try {
-    let css = await renderSASS({ file, includePaths: ['node_modules'] })
+    let css = await renderSASS({
+      file: sassInputFile,
+      includePaths: ['node_modules'],
+    })
     css = await renderPostCSS(css)
     await fs.outputFile(pkg.style, css)
     logger.log(chalk.green('SASS build successful.'))
@@ -149,38 +166,33 @@ async function safeBuildStyles(...args) {
 async function build(args) {
   args = minimist(args, {
     alias: { copy: 'c', watch: 'w', ignore: 'i', sass: 's' },
-    boolean: '--watch',
+    boolean: 'watch',
     string: ['copy', 'ignore', 'sass'],
   })
 
-  const ignoredFiles = [
+  let ignoredFiles = [
     '**/*.{spec,test,stories}.js',
     '**/__tests__/**',
     '**/__mocks__/**',
     '**/setupTests.js',
   ]
 
-  if (args.ignore) {
-    ignoredFiles.push(args.ignore)
+  if (args.ignore != null) {
+    ignoredFiles = ignoredFiles.concat(ensureArray(args.ignore))
   }
 
-  const sourceFilesJS = glob.sync('src/**/*.js', { ignore: ignoredFiles })
-
   let filesToCopy = []
-
   if (args.copy != null) {
-    if (typeof args.copy === 'string') {
-      filesToCopy = glob.sync(args.copy)
-    } else if (Array.isArray(args.copy)) {
-      filesToCopy = args.copy.reduce(
-        (acc, pattern) => acc.concat(glob.sync(pattern)),
-        []
-      )
-    }
+    filesToCopy = (await Promise.all(
+      ensureArray(args.copy).map(pattern => glob(pattern))
+    )).reduce((acc, files) => acc.concat(files), [])
   }
 
   const sassInputFile = args.sass || './src/index.scss'
-  const hasSASS = fs.existsSync(sassInputFile)
+  const [hasSASS, pkg] = await Promise.all([
+    fs.existsSync(sassInputFile),
+    fs.readJSON('package.json'),
+  ])
 
   if (!pkg.style && hasSASS) {
     logger.warn(
@@ -197,6 +209,7 @@ async function build(args) {
   }
 
   const hasStyles = pkg.style && hasSASS
+  const sourceFilesJS = await glob('src/**/*.js', { ignore: ignoredFiles })
 
   if (args.watch) {
     const watchOptions = { ignoreInitial: true }
@@ -207,13 +220,13 @@ async function build(args) {
     if (hasStyles) {
       const styleWatcher = chokidar.watch('src/**/*.scss', watchOptions)
       styleWatcher.on('all', () => safeBuildStyles(sassInputFile))
-      safeBuildStyles(sassInputFile)
+      safeBuildStyles({ sassInputFile, pkg })
     }
   } else {
-    buildModules(sourceFilesJS, filesToCopy)
+    buildModules({ sourceFilesJS, filesToCopy, pkg })
 
     if (hasStyles) {
-      buildStyles(sassInputFile)
+      buildStyles({ sassInputFile, pkg })
     }
   }
 }

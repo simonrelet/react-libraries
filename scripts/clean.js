@@ -4,9 +4,11 @@ const chalk = require('chalk')
 const fs = require('fs-extra')
 const logger = require('../lib/logger')
 
-const files = ['build', 'build-storybook', 'coverage'].filter(fs.existsSync)
+const defaultFiles = ['build', 'build-storybook', 'coverage']
 
-async function clean() {
+async function clean(args) {
+  const files = defaultFiles.concat(args).filter(fs.existsSync)
+
   if (!files.length) {
     logger.log('Already clean.')
     return

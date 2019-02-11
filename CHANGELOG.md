@@ -20,10 +20,14 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 ### Breaking changes
 
 - Remove `doc` script.
+- In README generation, skiping injection is now done with `{{!path}}` instead of `\\{{path}}`.
 
 ### Enhancements
 
 - Add a `readme` script to generate a README file from a template.
+- Add SASS generation during `build` script.
+- Add a `--ignore` options to the `build` script.
+- Can specify additional paths to delete in `clean` script.
 
 ## 0.17.0 (November 9, 2018)
 

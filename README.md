@@ -6,7 +6,7 @@
 
 # @simonrelet/react-libraries
 
-> Configuration and scripts for React libraries.
+Configuration and scripts for React libraries.
 
 ⚠️ **Warning:** The current master can represent unreleased features.
 [See lastest release](https://github.com/simonrelet/react-libraries/tree/react-libraries-0.17.0/packages/react-libraries).
@@ -27,20 +27,30 @@ yarn add @simonrelet/react-libraries -D
 
 ## Scripts
 
-### `build`
+### build
 
-_Usage_:
+Build the library JavaScript and styles.
+
+_Usage:_
 
 ```sh
-react-libraries build [-i|--ignore ignoreGlob] [-c|--copy copyGlob] [-s|--sass sassEntry] [-w|--watch]
+react-libraries build [options]
 ```
 
-Build the library JavaScript in CommonJS and ES modules.
+_Options:_
 
-This script accepts the `--watch` (or `-w`) option in which case it will watch for changes and rebuild.
-An optional [glob](https://www.npmjs.com/package/glob) pattern of files can be passed in order to copy them to the output folders.
-The SASS entry point is by default _src/index.scss_ but can be changed using the `--sass` (or `-s`) option.
-By default files ending with _.spec.js_, _.test.js_ _.stories.js_, all files under a <em>\_\_tests\_\_</em> or <em>\_\_mocks\_\_</em> folder and _setupTests.js_ are ignored.
+- `-i`, `--ignore=pattern`:
+  [Glob pattern](https://www.npmjs.com/package/glob) to ignore from JavaScript build.
+  The files ignored by default are:
+  - _\*\*/\*.spec.js_
+  - _\*\*/\*.test.js_
+  - _\*\*/\*.stories.js_
+  - <em>\*\*/\_\_tests\_\_/\*\*</em>
+  - <em>\*\*/\_\_mocks\_\_/\*\*</em>
+  - _src/setupTests.js_
+- `-c`, `--copy=pattern`: [Glob pattern](https://www.npmjs.com/package/glob) to copy to the output folder.
+- `-s`, `--sass=entryFile`: The SASS entry point, _src/index.scss_ by default.
+- `-w`, `--watch`: Watch the files and rebuild in case of changes.
 
 In order to build in CommonJS the entry _package.json#main_ must point to the output folder.
 Ex: `"main": "build/cjs"`.
@@ -51,51 +61,96 @@ Ex: `"module": "build/es"`.
 In order to build SASS styles the entry _package.json#style_ must point to the output file.
 Ex: `"style": "build/my-lib.css"`.
 
-### `bump-version`
-
-_Usage_:
+_Examples:_
 
 ```sh
-react-libraries bump-version [-r|--readme templatePath>] <new-verison>
+react-libraries build
+react-libraries build --watch
+react-libraries build --copy "**/*.ts" --copy="src/_mixins.scss"
+react-libraries build -s "src/main.scss"
+react-libraries build -i "**/*.doc.js" --ignore "src/renderTests.js"
 ```
 
-Update the following files with the new version:
+### bump-version
+
+Update the new version number in the project.
+
+_Usage:_
+
+```sh
+react-libraries bump-version [options] <new-verison>
+```
+
+_Options:_
+
+- `-r`, `--readme=templatePath`: Path of the template file to use, _README-template.md_ by default.
+
+The files that will be updated are:
 
 - _package.json_: The `version` field is updated.
+- _package-lock.json_ (if it exists): The `version` field is updated.
 - _CHANGELOG.md_ (if it exists): The "Unreleased" section is renamed to "\<new-version> (date)".
 - _README.md_ (if the template file exists): See the [`readme` script](#readme).
 
-### `clean`
-
-_Usage_:
+_Examples:_
 
 ```sh
-react-libraries clean
+react-libraries bump-version 2.3.0
+react-libraries bump-version -t "template-README.md" 5.0.0-alpha.2
 ```
 
-Remove the folowing generated folders:
+### clean
+
+Clean the project.
+
+_Usage:_
+
+```sh
+react-libraries clean [folders]
+```
+
+The folders removed by default are:
 
 - _build/_
 - _build-storybook/_
 - _coverage/_
 
-### `readme`
-
-_Usage_:
+_Examples:_
 
 ```sh
-react-libraries readme [-t|--template templatePath]
+react-libraries clean
+react-libraries clean .docz .tmp
 ```
 
+### readme
+
 Generate a _README.md_ file from a template.
-By default, the README template path is _README-template.md_ but it can be changed using the `--template` (or `-t`) option.
+
+_Usage:_
+
+```sh
+react-libraries readme [options]
+```
+
+_Options:_
+
+- `-t`, `--template=templatePath`: Path of the template file to use, _README-template.md_ by default.
+
+_Examples:_
+
+```sh
+react-libraries readme
+react-libraries readme --template="template-README.md"
+```
 
 #### README template
 
 The _README.md_ file can be generated from a template file allowing you to inject values from your _package.json_.
 You can use the syntax `{{path}}` where `path` is any valid object path in _package.json_.
+An injection will be skipped if `path` isn't found in _package.json_ or if the path is prefixed with a `!` (`{{path}}`).
+In which case the `!` will be removed from the output.
 
-Example:
+**Example:**
 
 _package.json_
 
@@ -118,7 +173,7 @@ _README-template.md_
 ````md
 # {{name}}
 
-> {{description}}
+{{description}}
 
 ## Installation
 
@@ -136,12 +191,12 @@ yarn add {{name}}
 
 ### UMD
 
-- Production: https://unpkg.com/{{name}}@{{version}} or https://unpkg.com/\\{name}@{{version}}/{{unpkg}}
+- Production: https://unpkg.com/{{name}}@{{version}} or https://unpkg.com/{{name}}@{{version}}/{{unpkg}}
 - Development: https://unpkg.com/{{name}}@{{version}}/{{unpkg-dev}}
 
 ## Documentation
 
-The documentation can be found [here](https://github.com/simonrelet/react-libraries/tree/0.17.0/docs).
+The documentation can be found [here]({{repository.url}}/tree/{{version}}/docs).
 ````
 
 _README.md_
@@ -149,7 +204,7 @@ _README.md_
 ````md
 # my-lib
 
-> Library of things.
+Library of things.
 
 ## Installation
 
@@ -175,12 +230,24 @@ yarn add my-lib
 The documentation can be found [here](https://github.com/me/my-lib/tree/1.0.0/docs).
 ````
 
-### `test`
+### test
 
-_Usage_:
+Launches the test with Jest.
+
+_Usage:_
 
 ```sh
-react-libraries test [--coverage]
+react-libraries test [options]
 ```
 
-Launches Jest in the interactive watch mode.
+_Options:_
+
+- `--coverage`: Compute the coverage.
+
+_Examples:_
+
+```sh
+react-libraries test
+react-libraries test --coverage
+env CI=true react-libraries test
+```

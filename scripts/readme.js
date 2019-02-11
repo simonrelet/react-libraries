@@ -3,13 +3,13 @@
 const minimist = require('minimist')
 const generateReadme = require('../lib/generateReadme')
 
-function readme(args) {
+async function readme(args) {
   args = minimist(args, {
     alias: { template: 't' },
     string: 'template',
   })
 
-  generateReadme(args.template)
+  await generateReadme(args.template)
 }
 
 module.exports = readme

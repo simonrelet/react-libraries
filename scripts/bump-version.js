@@ -3,42 +3,54 @@
 const chalk = require('chalk')
 const dateFns = require('date-fns')
 const fs = require('fs-extra')
+const minimist = require('minimist')
 const semver = require('semver')
 const logger = require('../lib/logger')
 const generateReadme = require('../lib/generateReadme')
 
-const pkg = fs.readJSONSync('package.json')
-
 const changelogPath = 'CHANGELOG.md'
 
-function updatePackage(version) {
+async function updatePackage(version, pkg) {
   pkg.version = version
-  fs.writeJSONSync('package.json', pkg, { spaces: 2 })
+  await fs.writeJSON('package.json', pkg, { spaces: 2 })
   logger.generated('package.json', 'package.json')
+
+  if (await fs.exists('package-lock.json')) {
+    const lock = await fs.readJSON('package-lock.json')
+    lock.version = version
+    await fs.writeJSON('package-lock.json', lock, { spaces: 2 })
+    logger.generated('package-lock.json', 'package-lock.json')
+  }
 }
 
-function updateChangelog(version) {
-  if (fs.existsSync(changelogPath)) {
+async function updateChangelog(version) {
+  if (await fs.exists(changelogPath)) {
     const date = dateFns.format(new Date(), 'MMMM D, YYYY')
-    const changelog = fs
-      .readFileSync(changelogPath, 'utf8')
-      .replace('## Unreleased', `## ${version} (${date})`)
+    const content = await fs.readFile(changelogPath, 'utf8')
+    const changelog = content.replace(
+      '## Unreleased',
+      `## ${version} (${date})`
+    )
 
-    fs.writeFileSync(changelogPath, changelog)
+    await fs.writeFile(changelogPath, changelog)
     logger.generated(changelogPath, changelogPath)
   }
 }
 
-function bumpVersion(args) {
-  const readmeInput =
-    args[0] === '--readme' || args[0] === '-r' ? args[1] : undefined
+async function bumpVersion(args) {
+  args = minimist(args, {
+    alias: { readme: 'r' },
+    string: 'readme',
+  })
 
-  const version = args[args.length - 1]
+  const version = args._[0]
 
   if (!version) {
     logger.error('Missing version number.')
     process.exit(1)
   }
+
+  const pkg = await fs.readJSON('package.json')
 
   if (!semver.valid(version)) {
     logger.error(
@@ -57,9 +69,9 @@ function bumpVersion(args) {
     process.exit(1)
   }
 
-  updatePackage(version)
-  updateChangelog(version)
-  generateReadme(readmeInput)
+  await updatePackage(version, pkg)
+  await updateChangelog(version)
+  await generateReadme(args.readme)
 }
 
 module.exports = bumpVersion
