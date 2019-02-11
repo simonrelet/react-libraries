@@ -9,7 +9,7 @@
 Configuration and scripts for React libraries.
 
 ⚠️ **Warning:** The current master can represent unreleased features.
-[See lastest release](https://github.com/simonrelet/react-libraries/tree/1.0.0-alpha.1).
+[See lastest release](https://github.com/simonrelet/react-libraries/tree/1.0.0-alpha.2).
 
 ## Installation
 
