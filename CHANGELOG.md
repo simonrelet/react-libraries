@@ -15,6 +15,12 @@ All notable changes to this project will be documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Bug fixes
+
+- Don't remove the `!` prefix for non existing paths in `readme` script.
+
 ## 1.0.0-alpha.1 (February 11, 2019)
 
 ### Breaking changes

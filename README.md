@@ -147,7 +147,7 @@ react-libraries readme --template="template-README.md"
 
 The _README.md_ file can be generated from a template file allowing you to inject values from your _package.json_.
 You can use the syntax `{{path}}` where `path` is any valid object path in _package.json_.
-An injection will be skipped if `path` isn't found in _package.json_ or if the path is prefixed with a `!` (`{{path}}`).
+An injection will be skipped if `path` isn't found in _package.json_ or if the path is prefixed with a `!` (`{{!path}}`).
 In which case the `!` will be removed from the output.
 
 **Example:**
@@ -171,32 +171,32 @@ _package.json_
 _README-template.md_
 
 ````md
-# {{name}}
+# {{!name}}
 
-{{description}}
+{{!description}}
 
 ## Installation
 
 ### npm
 
 ```sh
-npm install --save {{name}}
+npm install --save {{!name}}
 ```
 
 ### yarn
 
 ```sh
-yarn add {{name}}
+yarn add {{!name}}
 ```
 
 ### UMD
 
-- Production: https://unpkg.com/{{name}}@{{version}} or https://unpkg.com/{{name}}@{{version}}/{{unpkg}}
-- Development: https://unpkg.com/{{name}}@{{version}}/{{unpkg-dev}}
+- Production: https://unpkg.com/{{!name}}@{{!version}} or https://unpkg.com/{{!name}}@{{!version}}/{{!unpkg}}
+- Development: https://unpkg.com/{{!name}}@{{!version}}/{{!unpkg-dev}}
 
 ## Documentation
 
-The documentation can be found [here]({{repository.url}}/tree/{{version}}/docs).
+The documentation can be found [here]({{!repository.url}}/tree/{{!version}}/docs).
 ````
 
 _README.md_
