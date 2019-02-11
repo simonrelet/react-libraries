@@ -3,7 +3,7 @@
 {{description}}
 
 ⚠️ **Warning:** The current master can represent unreleased features.
-[See lastest release]({{repository.url}}/tree/react-libraries-{{version}}/packages/react-libraries).
+[See lastest release]({{repository.url}}/tree/{{version}}).
 
 ## Installation
 
