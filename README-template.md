@@ -60,9 +60,9 @@ _Examples:_
 ```sh
 react-libraries build
 react-libraries build --watch
-react-libraries build --copy "**/*.ts" --copy="src/_mixins.scss"
+react-libraries build --copy "src/**/*.ts" --copy="src/_mixins.scss"
 react-libraries build -s "src/main.scss"
-react-libraries build -i "**/*.doc.js" --ignore "src/renderTests.js"
+react-libraries build -i "src/**/*.doc.js" --ignore "src/renderTests.js"
 ```
 
 ### bump-version
