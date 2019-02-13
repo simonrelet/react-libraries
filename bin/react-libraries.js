@@ -39,8 +39,9 @@ async function run() {
   try {
     const fn = require(`../scripts/${script}`)
     await fn(args.slice(1))
-  } catch (err) {
-    logger.error(`Failed to execute ${chalk.cyan(script)}.`, err)
+  } catch (error) {
+    logger.error(error.message || error)
+    logger.error(`Failed to execute ${chalk.cyan(script)}.`)
     process.exit(1)
   }
 }

@@ -46,27 +46,24 @@ async function bumpVersion(args) {
   const version = args._[0]
 
   if (!version) {
-    logger.error('Missing version number.')
-    process.exit(1)
+    throw new Error('Missing version number.')
   }
 
   const pkg = await fs.readJSON('package.json')
 
   if (!semver.valid(version)) {
-    logger.error(
+    throw new Error(
       `The version ${chalk.cyan(version)}` +
         ` is not a valid semantic version number.`
     )
-    process.exit(1)
   }
 
   if (semver.lte(version, pkg.version)) {
-    logger.log(
-      `The version number must be bigger than the current one.`,
-      `  Received: ${chalk.cyan(version)}`,
-      `  Current:  ${chalk.cyan(pkg.version)}`
+    throw new Error(
+      `The version number must be bigger than the current one.\n` +
+        `  Received: ${chalk.cyan(version)}\n` +
+        `  Current:  ${chalk.cyan(pkg.version)}`
     )
-    process.exit(1)
   }
 
   await updatePackage(version, pkg)

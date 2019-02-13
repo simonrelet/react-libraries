@@ -194,6 +194,10 @@ async function build(args) {
     fs.readJSON('package.json'),
   ])
 
+  if (!pkg.main) {
+    throw new Error('No package.json#main key found.')
+  }
+
   if (!pkg.style && hasSASS) {
     logger.warn(
       chalk.yellow(
@@ -211,22 +215,34 @@ async function build(args) {
   const hasStyles = pkg.style && hasSASS
   const sourceFilesJS = await glob('src/**/*.js', { ignore: ignoredFiles })
 
+  const configJS = {
+    sourceFilesJS,
+    filesToCopy,
+    pkg,
+  }
+
+  const configStyles = {
+    sassInputFile,
+    pkg,
+  }
+
   if (args.watch) {
     const watchOptions = { ignoreInitial: true }
-    const jsWatcher = chokidar.watch('src/**', watchOptions)
-    jsWatcher.on('all', () => safeBuildModules(sourceFilesJS, filesToCopy))
-    safeBuildModules(sourceFilesJS, filesToCopy)
+
+    const runJS = () => safeBuildModules(configJS)
+    chokidar.watch('src/**', watchOptions).on('all', runJS)
+    runJS()
 
     if (hasStyles) {
-      const styleWatcher = chokidar.watch('src/**/*.scss', watchOptions)
-      styleWatcher.on('all', () => safeBuildStyles(sassInputFile))
-      safeBuildStyles({ sassInputFile, pkg })
+      const runStyles = () => safeBuildStyles(configStyles)
+      chokidar.watch('src/**/*.scss', watchOptions).on('all', runStyles)
+      runStyles()
     }
   } else {
-    buildModules({ sourceFilesJS, filesToCopy, pkg })
+    buildModules(configJS)
 
     if (hasStyles) {
-      buildStyles({ sassInputFile, pkg })
+      buildStyles(configStyles)
     }
   }
 }
