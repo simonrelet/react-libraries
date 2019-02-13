@@ -1,5 +1,8 @@
 # {{name}}
 
+[![npm version latest](https://img.shields.io/npm/v/{{name}}/latest.svg?colorB=success&style=flat-square)](https://www.npmjs.com/package/{{name}})
+[![npm version next](https://img.shields.io/npm/v/{{name}}/next.svg?colorB=blue&style=flat-square)](https://www.npmjs.com/package/{{name}}/v/{{version}})
+
 {{description}}
 
 ⚠️ **Warning:** The current master can represent unreleased features.

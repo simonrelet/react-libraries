@@ -6,6 +6,9 @@
 
 # @simonrelet/react-libraries
 
+[![npm version latest](https://img.shields.io/npm/v/@simonrelet/react-libraries/latest.svg?colorB=success&style=flat-square)](https://www.npmjs.com/package/@simonrelet/react-libraries)
+[![npm version next](https://img.shields.io/npm/v/@simonrelet/react-libraries/next.svg?colorB=blue&style=flat-square)](https://www.npmjs.com/package/@simonrelet/react-libraries/v/1.0.0-alpha.3)
+
 Configuration and scripts for React libraries.
 
 ⚠️ **Warning:** The current master can represent unreleased features.
