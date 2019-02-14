@@ -9,7 +9,7 @@ function resolve(relativePath) {
   return path.resolve(__dirname, '..', relativePath)
 }
 
-function createJestConfig() {
+function createJestConfig(overrideConfig) {
   const setupTestsFile = []
 
   if (fs.existsSync(testsSetupPath)) {
@@ -42,6 +42,12 @@ function createJestConfig() {
       '^.+\\.module\\.scss$': require.resolve('identity-obj-proxy'),
     },
     moduleFileExtensions: ['js', 'json', 'jsx'],
+  }
+
+  if (overrideConfig) {
+    Object.entries(overrideConfig).forEach(([key, value]) => {
+      config[key] = value
+    })
   }
 
   return config

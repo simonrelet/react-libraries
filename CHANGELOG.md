@@ -15,6 +15,12 @@ All notable changes to this project will be documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Enhancements
+
+- Add the possibility to override the default Jest converage config from the _package.json_.
+
 ## 1.0.0-alpha.4 (February 13, 2019)
 
 ### Bug fixes

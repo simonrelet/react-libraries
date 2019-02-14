@@ -241,6 +241,41 @@ _Options:_
 
 - `--coverage`: Compute the coverage.
 
+The default Jest coverage configuration can be overridden by adding any of the following supported keys to a Jest config in your _package.json_.
+
+Supported overrides:
+
+- [`collectCoverageFrom`](https://jestjs.io/docs/en/configuration.html#collectcoveragefrom-array)
+- [`coverageReporters`](https://jestjs.io/docs/en/configuration.html#coveragereporters-array-string)
+- [`coverageThreshold`](https://jestjs.io/docs/en/configuration.html#coveragethreshold-object)
+- [`snapshotSerializers`](https://jestjs.io/docs/en/configuration.html#snapshotserializers-array-string)
+
+Example of _package.json_:
+
+```json
+{
+  "name": "my-lib",
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/**/*.stories.js",
+      "!src/**/*.doc.js",
+      "!src/**/index.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    },
+    "coverageReporters": ["text"],
+    "snapshotSerializers": ["my-serializer-module"]
+  }
+}
+```
+
 _Examples:_
 
 ```sh
