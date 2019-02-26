@@ -95,7 +95,24 @@ async function buildModule({
   }
 }
 
-async function buildModules({ sourceFilesJS, filesToCopy, pkg }) {
+async function buildModules({ filesPatternsToCopy, ignoredFiles, pkg }) {
+  async function getSources() {
+    return await glob('src/**/*.js', { ignore: ignoredFiles })
+  }
+
+  async function getFilesToCopy() {
+    const files = await Promise.all(
+      filesPatternsToCopy.map(pattern => glob(pattern))
+    )
+
+    return files.reduce((acc, files) => acc.concat(files), [])
+  }
+
+  const [sourceFilesJS, filesToCopy] = await Promise.all([
+    getSources(),
+    getFilesToCopy(),
+  ])
+
   if (pkg.main) {
     await buildModule({
       sourceFilesJS,
@@ -181,13 +198,6 @@ async function build(args) {
     ignoredFiles = ignoredFiles.concat(ensureArray(args.ignore))
   }
 
-  let filesToCopy = []
-  if (args.copy != null) {
-    filesToCopy = (await Promise.all(
-      ensureArray(args.copy).map(pattern => glob(pattern))
-    )).reduce((acc, files) => acc.concat(files), [])
-  }
-
   const sassInputFile = args.sass || './src/index.scss'
   const [hasSASS, pkg] = await Promise.all([
     fs.existsSync(sassInputFile),
@@ -213,11 +223,11 @@ async function build(args) {
   }
 
   const hasStyles = pkg.style && hasSASS
-  const sourceFilesJS = await glob('src/**/*.js', { ignore: ignoredFiles })
+  const filesPatternsToCopy = args.copy == null ? [] : ensureArray(args.copy)
 
   const configJS = {
-    sourceFilesJS,
-    filesToCopy,
+    filesPatternsToCopy,
+    ignoredFiles,
     pkg,
   }
 
