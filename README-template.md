@@ -81,6 +81,7 @@ react-libraries bump-version [options] <new-verison>
 _Options:_
 
 - `-r`, `--readme=templatePath`: Path of the template file to use, _README-template.md_ by default.
+- `--skip-check`: Allow version numbers lower than the current one.
 
 The files that will be updated are:
 

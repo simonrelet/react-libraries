@@ -41,9 +41,11 @@ async function bumpVersion(args) {
   args = minimist(args, {
     alias: { readme: 'r' },
     string: 'readme',
+    boolean: 'skip-check',
   })
 
   const version = args._[0]
+  const skipCheck = args['skip-check']
 
   if (!version) {
     throw new Error('Missing version number.')
@@ -58,7 +60,7 @@ async function bumpVersion(args) {
     )
   }
 
-  if (semver.lte(version, pkg.version)) {
+  if (!skipCheck && semver.lte(version, pkg.version)) {
     throw new Error(
       `The version number must be bigger than the current one.\n` +
         `  Received: ${chalk.cyan(version)}\n` +
