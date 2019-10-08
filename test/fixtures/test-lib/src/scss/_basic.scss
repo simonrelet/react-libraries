@@ -1,0 +1,11 @@
+.simple-class {
+  background: red;
+}
+
+.simple-class::before {
+  background: black;
+}
+
+.simple-class:hover {
+  background: green;
+}
