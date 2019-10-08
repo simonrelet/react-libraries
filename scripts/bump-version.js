@@ -25,7 +25,7 @@ async function updatePackage(version, pkg) {
 
 async function updateChangelog(version) {
   if (await fs.exists(changelogPath)) {
-    const date = dateFns.format(new Date(), 'MMMM D, YYYY')
+    const date = dateFns.format(new Date(), 'MMMM d, yyyy')
     const content = await fs.readFile(changelogPath, 'utf8')
     const changelog = content.replace(
       '## Unreleased',

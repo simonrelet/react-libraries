@@ -15,6 +15,18 @@ All notable changes to this project will be documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Enhancements
+
+- Update dependencies.
+
+## 1.0.0 (April 30, 2019)
+
+### Enhancements
+
+- Add `--skip-check` option to the `bump-version` script.
+
 ## 1.0.0-alpha.6 (February 26, 2019)
 
 ### Enhancements
