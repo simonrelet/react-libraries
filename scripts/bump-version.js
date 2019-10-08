@@ -8,7 +8,7 @@ const semver = require('semver')
 const logger = require('../lib/logger')
 const generateReadme = require('../lib/generateReadme')
 
-const changelogPath = 'CHANGELOG.md'
+const CHANGELOG_PATH = 'CHANGELOG.md'
 
 async function updatePackage(version, pkg) {
   pkg.version = version
@@ -24,16 +24,16 @@ async function updatePackage(version, pkg) {
 }
 
 async function updateChangelog(version) {
-  if (await fs.exists(changelogPath)) {
+  if (await fs.exists(CHANGELOG_PATH)) {
     const date = dateFns.format(new Date(), 'MMMM d, yyyy')
-    const content = await fs.readFile(changelogPath, 'utf8')
+    const content = await fs.readFile(CHANGELOG_PATH, 'utf8')
     const changelog = content.replace(
       '## Unreleased',
       `## ${version} (${date})`
     )
 
-    await fs.writeFile(changelogPath, changelog)
-    logger.generated(changelogPath, changelogPath)
+    await fs.writeFile(CHANGELOG_PATH, changelog)
+    logger.generated(CHANGELOG_PATH, CHANGELOG_PATH)
   }
 }
 
