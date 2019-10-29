@@ -15,6 +15,12 @@ All notable changes to this project will be documented here.
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Bug fixes
+
+- When files are copied during the `build` script, the intermediate folders are created.
+
 ## 1.1.0 (October 8, 2019)
 
 ### Enhancements

@@ -8,8 +8,9 @@ const cssnano = require('cssnano')
 const fs = require('fs-extra')
 const globCB = require('glob')
 const minimist = require('minimist')
-const sass = require('node-sass')
+const path = require('path')
 const postcss = require('postcss')
+const sass = require('node-sass')
 const createBabelConfig = require('../config/createBabelConfig')
 const logger = require('../lib/logger')
 
@@ -65,7 +66,9 @@ async function copyFiles(filesToCopy, outputFolder) {
   const outputFilename = getOutputFileName(outputFolder)
 
   async function copyFile(filename) {
-    return await fs.copyFile(filename, outputFilename(filename))
+    const destination = outputFilename(filename)
+    await fs.ensureDir(path.dirname(destination))
+    return await fs.copyFile(filename, destination)
   }
 
   return await Promise.all(filesToCopy.map(copyFile))
