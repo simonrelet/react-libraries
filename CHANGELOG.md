@@ -17,6 +17,10 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+### Breaking changes
+
+- Update Babel config to match react-scripts.
+
 ### Bug fixes
 
 - When files are copied during the `build` script, the intermediate folders are created.
