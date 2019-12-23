@@ -7,12 +7,12 @@
 # @simonrelet/react-libraries
 
 [![npm version latest](https://img.shields.io/npm/v/@simonrelet/react-libraries/latest.svg?colorB=success&style=flat-square)](https://www.npmjs.com/package/@simonrelet/react-libraries)
-[![npm version next](https://img.shields.io/npm/v/@simonrelet/react-libraries/next.svg?colorB=blue&style=flat-square)](https://www.npmjs.com/package/@simonrelet/react-libraries/v/1.1.0)
+[![npm version next](https://img.shields.io/npm/v/@simonrelet/react-libraries/next.svg?colorB=blue&style=flat-square)](https://www.npmjs.com/package/@simonrelet/react-libraries/v/2.0.0)
 
 Configuration and scripts for React libraries.
 
 ⚠️ **Warning:** The current master can represent unreleased features.
-[See lastest release](https://github.com/simonrelet/react-libraries/tree/1.1.0).
+[See lastest release](https://github.com/simonrelet/react-libraries/tree/2.0.0).
 
 ## Installation
 
