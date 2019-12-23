@@ -1,5 +1,8 @@
 'use strict'
 
+// Make sure the environment is set.
+process.env.NODE_ENV = 'test'
+
 const fs = require('fs-extra')
 const jest = require('jest')
 const createJestConfig = require('../config/createJestConfig')

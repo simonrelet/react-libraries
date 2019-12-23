@@ -20,6 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 ### Bug fixes
 
 - When files are copied during the `build` script, the intermediate folders are created.
+- `process.env.NODE_ENV` is set to `'test'` in the `test` script.
 
 ## 1.1.0 (October 8, 2019)
 
