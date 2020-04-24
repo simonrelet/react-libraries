@@ -15,7 +15,7 @@ const createBabelConfig = require('../config/createBabelConfig')
 const logger = require('../lib/logger')
 
 function getOutputFileName(outputFolder) {
-  return filename => filename.replace(/^src/, outputFolder)
+  return (filename) => filename.replace(/^src/, outputFolder)
 }
 
 function ensureArray(object) {
@@ -105,7 +105,7 @@ async function buildModules({ filesPatternsToCopy, ignoredFiles, pkg }) {
 
   async function getFilesToCopy() {
     const files = await Promise.all(
-      filesPatternsToCopy.map(pattern => glob(pattern))
+      filesPatternsToCopy.map((pattern) => glob(pattern))
     )
 
     return files.reduce((acc, files) => acc.concat(files), [])

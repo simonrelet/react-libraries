@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   throw err
 })
 
@@ -15,10 +15,10 @@ const args = process.argv.slice(2)
 const script = args[0]
 const scripts = fs
   .readdirSync(path.join(__dirname, '..', 'scripts'))
-  .map(s => path.basename(s, '.js'))
+  .map((s) => path.basename(s, '.js'))
 
 const availableScripts = `The available scripts are: ${scripts
-  .map(s => chalk.cyan(s))
+  .map((s) => chalk.cyan(s))
   .join(', ')}.`
 
 if (!script) {
