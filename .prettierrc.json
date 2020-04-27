@@ -1,5 +1,13 @@
 {
   "singleQuote": true,
   "proseWrap": "preserve",
-  "semi": false
+  "semi": false,
+  "overrides": [
+    {
+      "files": ["test/fixtures/**"],
+      "options": {
+        "trailingComma": "all"
+      }
+    }
+  ]
 }

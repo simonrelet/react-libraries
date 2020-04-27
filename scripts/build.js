@@ -6,32 +6,20 @@ const chalk = require('chalk')
 const chokidar = require('chokidar')
 const cssnano = require('cssnano')
 const fs = require('fs-extra')
-const globCB = require('glob')
 const minimist = require('minimist')
 const path = require('path')
 const postcss = require('postcss')
 const sass = require('node-sass')
 const createBabelConfig = require('../config/createBabelConfig')
+const glob = require('../lib/glob')
 const logger = require('../lib/logger')
 
 function getOutputFileName(outputFolder) {
   return (filename) => filename.replace(/^src/, outputFolder)
 }
 
-function ensureArray(object) {
+function ensureArray(object = []) {
   return Array.isArray(object) ? object : [object]
-}
-
-function glob(...args) {
-  return new Promise((resolve, reject) => {
-    globCB(...args, (error, files) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve(files)
-      }
-    })
-  })
 }
 
 async function buildJS({ sourceFilesJS, modulesType, outputFolder }) {
@@ -190,20 +178,16 @@ async function build(args) {
     string: ['copy', 'ignore', 'sass'],
   })
 
-  let ignoredFiles = [
+  const ignoredFiles = [
     '**/*.{spec,test,stories}.js',
     '**/__tests__/**',
     '**/__mocks__/**',
     '**/setupTests.js',
-  ]
-
-  if (args.ignore != null) {
-    ignoredFiles = ignoredFiles.concat(ensureArray(args.ignore))
-  }
+  ].concat(ensureArray(args.ignore))
 
   const sassInputFile = args.sass || './src/index.scss'
   const [hasSASS, pkg] = await Promise.all([
-    fs.existsSync(sassInputFile),
+    fs.exists(sassInputFile),
     fs.readJSON('package.json'),
   ])
 
@@ -226,10 +210,9 @@ async function build(args) {
   }
 
   const hasStyles = pkg.style && hasSASS
-  const filesPatternsToCopy = args.copy == null ? [] : ensureArray(args.copy)
 
   const configJS = {
-    filesPatternsToCopy,
+    filesPatternsToCopy: ensureArray(args.copy),
     ignoredFiles,
     pkg,
   }

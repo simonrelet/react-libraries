@@ -2,12 +2,11 @@
 
 const chalk = require('chalk')
 const fs = require('fs-extra')
+const generatedFolders = require('../lib/generatedFolders')
 const logger = require('../lib/logger')
 
-const DEFAULT_FILES = ['build', 'build-storybook', 'coverage']
-
 async function clean(args) {
-  const files = DEFAULT_FILES.concat(args).filter(fs.existsSync)
+  const files = generatedFolders.concat(args).filter(fs.existsSync)
 
   if (!files.length) {
     logger.log('Already clean.')

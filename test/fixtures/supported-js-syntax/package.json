@@ -1,0 +1,5 @@
+{
+  "name": "supported-js-syntax",
+  "main": "build/cjs",
+  "module": "build/es"
+}

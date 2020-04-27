@@ -1,0 +1,761 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`supported-js-syntax build should generate all files 1`] = `
+Array [
+  "cjs/async.js",
+  "cjs/ClassComponent.js",
+  "cjs/DefaultExport.js",
+  "cjs/DynamicImport/DynamicImport.js",
+  "cjs/DynamicImport/LazyComponent.js",
+  "cjs/FunctionComponent.js",
+  "cjs/nullishCoalescing.js",
+  "cjs/optionalChaining.js",
+  "es/async.js",
+  "es/ClassComponent.js",
+  "es/DefaultExport.js",
+  "es/DynamicImport/DynamicImport.js",
+  "es/DynamicImport/LazyComponent.js",
+  "es/FunctionComponent.js",
+  "es/nullishCoalescing.js",
+  "es/optionalChaining.js",
+]
+`;
+
+exports[`supported-js-syntax build should not fail 1`] = `
+Exit code: 0
+
+--- Output ---
+CommonJS build successful.
+ES modules build successful.
+--------------
+`;
+
+exports[`supported-js-syntax build should transform each file to CommonJS 1`] = `
+// async.js
+
+async function doStuff() {
+  return Promise.resolve(1)
+}
+
+export async function otherStuff() {
+  const result = await doStuff()
+  return result + 1
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.otherStuff = otherStuff;
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+
+function doStuff() {
+  return _doStuff.apply(this, arguments);
+}
+
+function _doStuff() {
+  _doStuff = (0, _asyncToGenerator2["default"])(
+  /*#__PURE__*/
+  _regenerator["default"].mark(function _callee() {
+    return _regenerator["default"].wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            return _context.abrupt("return", Promise.resolve(1));
+
+          case 1:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _doStuff.apply(this, arguments);
+}
+
+function otherStuff() {
+  return _otherStuff.apply(this, arguments);
+}
+
+function _otherStuff() {
+  _otherStuff = (0, _asyncToGenerator2["default"])(
+  /*#__PURE__*/
+  _regenerator["default"].mark(function _callee2() {
+    var result;
+    return _regenerator["default"].wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return doStuff();
+
+          case 2:
+            result = _context2.sent;
+            return _context2.abrupt("return", result + 1);
+
+          case 4:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _otherStuff.apply(this, arguments);
+}
+`;
+
+exports[`supported-js-syntax build should transform each file to CommonJS 2`] = `
+// ClassComponent.js
+
+import React from 'react'
+
+export class ClassComponent extends React.Component {
+  state = {
+    string: '',
+    bool: true,
+  }
+
+  propertyField = 42
+
+  propertyMethod = () => {
+    this.setState({ bool: false })
+  }
+
+  render() {
+    return <p {...this.props}>ClassComponent</p>
+  }
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ClassComponent = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _react = _interopRequireDefault(require("react"));
+
+function _createSuper(Derived) { return function () { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+var ClassComponent =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2["default"])(ClassComponent, _React$Component);
+
+  var _super = _createSuper(ClassComponent);
+
+  function ClassComponent() {
+    var _this;
+
+    (0, _classCallCheck2["default"])(this, ClassComponent);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+    _this.state = {
+      string: '',
+      bool: true
+    };
+    _this.propertyField = 42;
+
+    _this.propertyMethod = function () {
+      _this.setState({
+        bool: false
+      });
+    };
+
+    return _this;
+  }
+
+  (0, _createClass2["default"])(ClassComponent, [{
+    key: "render",
+    value: function render() {
+      return (
+        /*#__PURE__*/
+        _react["default"].createElement("p", this.props, "ClassComponent")
+      );
+    }
+  }]);
+  return ClassComponent;
+}(_react["default"].Component);
+
+exports.ClassComponent = ClassComponent;
+`;
+
+exports[`supported-js-syntax build should transform each file to CommonJS 3`] = `
+// DefaultExport.js
+
+import React from 'react'
+
+export default function DefaultExport() {
+  return <div>DefaultExport</div>
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = DefaultExport;
+
+var _react = _interopRequireDefault(require("react"));
+
+function DefaultExport() {
+  return (
+    /*#__PURE__*/
+    _react["default"].createElement("div", null, "DefaultExport")
+  );
+}
+`;
+
+exports[`supported-js-syntax build should transform each file to CommonJS 4`] = `
+// DynamicImport.js
+
+import React from 'react'
+
+const LazyComponent = React.lazy(() => import('./LazyComponent'))
+
+export function DynamicImport(props) {
+  return <LazyComponent {...props} />
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DynamicImport = DynamicImport;
+
+var _interopRequireWildcard2 = _interopRequireDefault(require("@babel/runtime/helpers/interopRequireWildcard"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var LazyComponent = _react["default"].lazy(function () {
+  return Promise.resolve().then(function () {
+    return (0, _interopRequireWildcard2["default"])(require('./LazyComponent'));
+  });
+});
+
+function DynamicImport(props) {
+  return (
+    /*#__PURE__*/
+    _react["default"].createElement(LazyComponent, props)
+  );
+}
+`;
+
+exports[`supported-js-syntax build should transform each file to CommonJS 5`] = `
+// LazyComponent.js
+
+import React from 'react'
+
+export default function LazyComponent(props) {
+  return <div {...props}>LazyComponent</div>
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = LazyComponent;
+
+var _react = _interopRequireDefault(require("react"));
+
+function LazyComponent(props) {
+  return (
+    /*#__PURE__*/
+    _react["default"].createElement("div", props, "LazyComponent")
+  );
+}
+`;
+
+exports[`supported-js-syntax build should transform each file to CommonJS 6`] = `
+// FunctionComponent.js
+
+import PropTypes from 'prop-types'
+import React from 'react'
+
+export function FunctionComponent({ bool, string, number = 0, object }) {
+  const { a, b, c } = object
+  return <p>{JSON.stringify({ a, b, c, bool, string, number })}</p>
+}
+
+FunctionComponent.propTypes = {
+  bool: PropTypes.bool.isRequired,
+  string: PropTypes.string.isRequired,
+  number: PropTypes.number,
+  object: PropTypes.object,
+}
+
+FunctionComponent.defaultProps = {
+  object: {},
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FunctionComponent = FunctionComponent;
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _react = _interopRequireDefault(require("react"));
+
+function FunctionComponent(_ref) {
+  var bool = _ref.bool,
+      string = _ref.string,
+      _ref$number = _ref.number,
+      number = _ref$number === void 0 ? 0 : _ref$number,
+      object = _ref.object;
+  var a = object.a,
+      b = object.b,
+      c = object.c;
+  return (
+    /*#__PURE__*/
+    _react["default"].createElement("p", null, JSON.stringify({
+      a: a,
+      b: b,
+      c: c,
+      bool: bool,
+      string: string,
+      number: number
+    }))
+  );
+}
+
+FunctionComponent.propTypes = {
+  bool: _propTypes["default"].bool.isRequired,
+  string: _propTypes["default"].string.isRequired,
+  number: _propTypes["default"].number,
+  object: _propTypes["default"].object
+};
+FunctionComponent.defaultProps = {
+  object: {}
+};
+`;
+
+exports[`supported-js-syntax build should transform each file to CommonJS 7`] = `
+// nullishCoalescing.js
+
+export function nullishCoalescing(object) {
+  return object ?? 'defaultValue'
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.nullishCoalescing = nullishCoalescing;
+
+function nullishCoalescing(object) {
+  return object !== null && object !== void 0 ? object : 'defaultValue';
+}
+`;
+
+exports[`supported-js-syntax build should transform each file to CommonJS 8`] = `
+// optionalChaining.js
+
+export function getNestedValue(object) {
+  return object?.a?.b?.c
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getNestedValue = getNestedValue;
+
+function getNestedValue(object) {
+  var _object$a, _object$a$b;
+
+  return object === null || object === void 0 ? void 0 : (_object$a = object.a) === null || _object$a === void 0 ? void 0 : (_object$a$b = _object$a.b) === null || _object$a$b === void 0 ? void 0 : _object$a$b.c;
+}
+`;
+
+exports[`supported-js-syntax build should transform each file to ES module 1`] = `
+// async.js
+
+async function doStuff() {
+  return Promise.resolve(1)
+}
+
+export async function otherStuff() {
+  const result = await doStuff()
+  return result + 1
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+import _regeneratorRuntime from "@babel/runtime/regenerator";
+import _asyncToGenerator from "@babel/runtime/helpers/esm/asyncToGenerator";
+
+function doStuff() {
+  return _doStuff.apply(this, arguments);
+}
+
+function _doStuff() {
+  _doStuff = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime.mark(function _callee() {
+    return _regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            return _context.abrupt("return", Promise.resolve(1));
+
+          case 1:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _doStuff.apply(this, arguments);
+}
+
+export function otherStuff() {
+  return _otherStuff.apply(this, arguments);
+}
+
+function _otherStuff() {
+  _otherStuff = _asyncToGenerator(
+  /*#__PURE__*/
+  _regeneratorRuntime.mark(function _callee2() {
+    var result;
+    return _regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return doStuff();
+
+          case 2:
+            result = _context2.sent;
+            return _context2.abrupt("return", result + 1);
+
+          case 4:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _otherStuff.apply(this, arguments);
+}
+`;
+
+exports[`supported-js-syntax build should transform each file to ES module 2`] = `
+// ClassComponent.js
+
+import React from 'react'
+
+export class ClassComponent extends React.Component {
+  state = {
+    string: '',
+    bool: true,
+  }
+
+  propertyField = 42
+
+  propertyMethod = () => {
+    this.setState({ bool: false })
+  }
+
+  render() {
+    return <p {...this.props}>ClassComponent</p>
+  }
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+import _classCallCheck from "@babel/runtime/helpers/esm/classCallCheck";
+import _createClass from "@babel/runtime/helpers/esm/createClass";
+import _inherits from "@babel/runtime/helpers/esm/inherits";
+import _possibleConstructorReturn from "@babel/runtime/helpers/esm/possibleConstructorReturn";
+import _getPrototypeOf from "@babel/runtime/helpers/esm/getPrototypeOf";
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+import React from 'react';
+export var ClassComponent =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(ClassComponent, _React$Component);
+
+  var _super = _createSuper(ClassComponent);
+
+  function ClassComponent() {
+    var _this;
+
+    _classCallCheck(this, ClassComponent);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _super.call.apply(_super, [this].concat(args));
+    _this.state = {
+      string: '',
+      bool: true
+    };
+    _this.propertyField = 42;
+
+    _this.propertyMethod = function () {
+      _this.setState({
+        bool: false
+      });
+    };
+
+    return _this;
+  }
+
+  _createClass(ClassComponent, [{
+    key: "render",
+    value: function render() {
+      return (
+        /*#__PURE__*/
+        React.createElement("p", this.props, "ClassComponent")
+      );
+    }
+  }]);
+
+  return ClassComponent;
+}(React.Component);
+`;
+
+exports[`supported-js-syntax build should transform each file to ES module 3`] = `
+// DefaultExport.js
+
+import React from 'react'
+
+export default function DefaultExport() {
+  return <div>DefaultExport</div>
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+import React from 'react';
+export default function DefaultExport() {
+  return (
+    /*#__PURE__*/
+    React.createElement("div", null, "DefaultExport")
+  );
+}
+`;
+
+exports[`supported-js-syntax build should transform each file to ES module 4`] = `
+// DynamicImport.js
+
+import React from 'react'
+
+const LazyComponent = React.lazy(() => import('./LazyComponent'))
+
+export function DynamicImport(props) {
+  return <LazyComponent {...props} />
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+import React from 'react';
+var LazyComponent = React.lazy(function () {
+  return import('./LazyComponent');
+});
+export function DynamicImport(props) {
+  return (
+    /*#__PURE__*/
+    React.createElement(LazyComponent, props)
+  );
+}
+`;
+
+exports[`supported-js-syntax build should transform each file to ES module 5`] = `
+// LazyComponent.js
+
+import React from 'react'
+
+export default function LazyComponent(props) {
+  return <div {...props}>LazyComponent</div>
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+import React from 'react';
+export default function LazyComponent(props) {
+  return (
+    /*#__PURE__*/
+    React.createElement("div", props, "LazyComponent")
+  );
+}
+`;
+
+exports[`supported-js-syntax build should transform each file to ES module 6`] = `
+// FunctionComponent.js
+
+import PropTypes from 'prop-types'
+import React from 'react'
+
+export function FunctionComponent({ bool, string, number = 0, object }) {
+  const { a, b, c } = object
+  return <p>{JSON.stringify({ a, b, c, bool, string, number })}</p>
+}
+
+FunctionComponent.propTypes = {
+  bool: PropTypes.bool.isRequired,
+  string: PropTypes.string.isRequired,
+  number: PropTypes.number,
+  object: PropTypes.object,
+}
+
+FunctionComponent.defaultProps = {
+  object: {},
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+import PropTypes from 'prop-types';
+import React from 'react';
+export function FunctionComponent(_ref) {
+  var bool = _ref.bool,
+      string = _ref.string,
+      _ref$number = _ref.number,
+      number = _ref$number === void 0 ? 0 : _ref$number,
+      object = _ref.object;
+  var a = object.a,
+      b = object.b,
+      c = object.c;
+  return (
+    /*#__PURE__*/
+    React.createElement("p", null, JSON.stringify({
+      a: a,
+      b: b,
+      c: c,
+      bool: bool,
+      string: string,
+      number: number
+    }))
+  );
+}
+FunctionComponent.propTypes = {
+  bool: PropTypes.bool.isRequired,
+  string: PropTypes.string.isRequired,
+  number: PropTypes.number,
+  object: PropTypes.object
+};
+FunctionComponent.defaultProps = {
+  object: {}
+};
+`;
+
+exports[`supported-js-syntax build should transform each file to ES module 7`] = `
+// nullishCoalescing.js
+
+export function nullishCoalescing(object) {
+  return object ?? 'defaultValue'
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+export function nullishCoalescing(object) {
+  return object !== null && object !== void 0 ? object : 'defaultValue';
+}
+`;
+
+exports[`supported-js-syntax build should transform each file to ES module 8`] = `
+// optionalChaining.js
+
+export function getNestedValue(object) {
+  return object?.a?.b?.c
+}
+
+
+        ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+
+
+export function getNestedValue(object) {
+  var _object$a, _object$a$b;
+
+  return object === null || object === void 0 ? void 0 : (_object$a = object.a) === null || _object$a === void 0 ? void 0 : (_object$a$b = _object$a.b) === null || _object$a$b === void 0 ? void 0 : _object$a$b.c;
+}
+`;
