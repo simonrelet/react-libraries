@@ -1,0 +1,5 @@
+{
+  "name": "supported-scss-syntax",
+  "main": "build",
+  "style": "build/index.css"
+}

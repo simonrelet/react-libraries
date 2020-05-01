@@ -1,7 +1,7 @@
 'use strict'
 
-const path = require('path')
 const fs = require('fs-extra')
+const path = require('path')
 const generatedFolders = require('../lib/generatedFolders')
 const glob = require('../lib/glob')
 

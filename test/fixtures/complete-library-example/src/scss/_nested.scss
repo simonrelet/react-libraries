@@ -1,0 +1,15 @@
+.nested-selectors {
+  background: green;
+
+  &:focus {
+    background: black;
+  }
+
+  &--modifier {
+    background: yellow;
+  }
+
+  &::after {
+    background: purple;
+  }
+}
