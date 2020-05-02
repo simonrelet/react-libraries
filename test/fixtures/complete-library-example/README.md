@@ -1,0 +1,27 @@
+<!--
+  THIS FILE WAS GENERATED!
+  Don't make any changes in it, update README-template.md instead.
+  If you still need to make changes in this file, remove this header so it won't be overridden.
+-->
+
+# complete-library-example
+
+This is an example of library.
+
+## Installation
+
+### npm
+
+```sh
+npm install --save complete-library-example
+```
+
+### yarn
+
+```sh
+yarn add complete-library-example
+```
+
+## Documentation
+
+The documentation can be found [here](https://github.com/complete-library-example/complete-library-example/tree/2.0.0/docs).

@@ -1,8 +1,7 @@
 'use strict'
 
-const fs = require('fs-extra')
 const path = require('path')
-const { cleanFixture } = require('../../fixtureUtils')
+const { cleanFixture, listFolderContent } = require('../../fixtureUtils')
 const { callScriptInPackage } = require('../../scriptExecution')
 const packageJSON = require('./package.json')
 
@@ -16,12 +15,8 @@ describe(`${packageJSON.name} build`, () => {
     expect(result).toMatchSnapshot()
   })
 
-  it('should compile to CSS', async () => {
-    const compiledCSS = await fs.readFile(
-      path.resolve(__dirname, packageJSON.style),
-      'utf8',
-    )
-
-    expect(compiledCSS).toMatchSnapshot()
+  it('should generate all files', async () => {
+    const files = await listFolderContent(path.join(__dirname, 'build'))
+    expect(files).toMatchSnapshot()
   })
 })

@@ -5,7 +5,7 @@ const {
   cleanFixture,
   listFolderContent,
   createFileCompilation,
-} = require('../../fixtureContent')
+} = require('../../fixtureUtils')
 const { callScriptInPackage } = require('../../scriptExecution')
 const packageJSON = require('./package.json')
 

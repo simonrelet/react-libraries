@@ -39,9 +39,25 @@ const FileCompilationSnapshotSerializer = {
   },
 }
 
+async function getFixtureVersion(packagePath) {
+  const packageJSONPath = path.join(packagePath, 'package.json')
+  const packageJSON = await fs.readJSON(packageJSONPath)
+  return packageJSON.version
+}
+
+async function setFixtureVersion(packagePath, version) {
+  const packageJSONPath = path.join(packagePath, 'package.json')
+  const packageJSON = await fs.readJSON(packageJSONPath)
+  packageJSON.version = version
+
+  await fs.writeJSON(packageJSONPath, packageJSON, { spaces: 2 })
+}
+
 module.exports = {
   listFolderContent,
   cleanFixture,
+  getFixtureVersion,
+  setFixtureVersion,
   createFileCompilation,
   FileCompilationSnapshotSerializer,
 }

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`complete-library-example bump-version should not fail 1`] = `
+Exit code: 0
+
+--- Output ---
+package.json -> package.json
+CHANGELOG.md -> CHANGELOG.md
+README-template.md -> README.md
+--------------
+`;

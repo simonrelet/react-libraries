@@ -1,0 +1,16 @@
+.Button {
+  font: inherit;
+  padding: $spacingUnit;
+}
+
+.Button--default {
+  color: grey;
+}
+
+.Button--primary {
+  color: blue;
+}
+
+.Button--secondary {
+  color: white;
+}
