@@ -3,45 +3,46 @@
 const fs = require('fs-extra')
 const path = require('path')
 const semver = require('semver')
-const { getFixtureVersion, setFixtureVersion } = require('../../fixtureUtils')
-const { callScriptInPackage } = require('../../scriptExecution')
-const packageJSON = require('./package.json')
+const { Fixture } = require('../../fixtureUtils')
 
-const CHANGELOG_PATH = path.join(__dirname, 'CHANGELOG.md')
-// const README_PATH = path.join(__dirname, 'README.md')
-
-describe(`${packageJSON.name} bump-version`, () => {
-  let initialChangelogContent = ''
-  let initialVersion = ''
-  let version = ''
+describe(`${path.basename(__dirname)} bump-version`, () => {
+  let fixture
+  let newVersion
 
   beforeAll(async () => {
-    initialVersion = await getFixtureVersion(__dirname)
-    version = semver.inc(initialVersion, 'major')
+    fixture = new Fixture(__dirname)
+    await fixture.initialize()
 
-    initialChangelogContent = await fs.readFile(CHANGELOG_PATH, 'utf8')
+    const packageJSON = await fs.readJSON(fixture.paths.packageJSON)
+    newVersion = semver.inc(packageJSON.version, 'major')
   })
 
   afterAll(async () => {
-    await setFixtureVersion(__dirname, initialVersion)
-    await fs.writeFile(CHANGELOG_PATH, initialChangelogContent)
+    await fixture.reset()
   })
 
   it('should not fail', async () => {
-    const result = await callScriptInPackage(__dirname, 'bump-version', [
-      version,
-    ])
-
+    const result = await fixture.runScript('bump-version', [newVersion])
     expect(result).toMatchSnapshot()
   })
 
   it('should bump the new version', async () => {
-    const bumpedVersion = await getFixtureVersion(__dirname)
-    expect(bumpedVersion).toEqual(version)
+    const packageJSON = await fs.readJSON(fixture.paths.packageJSON)
+    expect(packageJSON.version).toEqual(newVersion)
+  })
+
+  it('should update the package-lock', async () => {
+    const packageLock = await fs.readJSON(fixture.paths.packageLock)
+    expect(packageLock.version).toEqual(newVersion)
   })
 
   it('should update the Changelog', async () => {
-    const changelogContent = await fs.readFile(CHANGELOG_PATH, 'utf8')
-    expect(changelogContent).toMatch(new RegExp(`${version}`))
+    const changelogContent = await fs.readFile(fixture.paths.changelog, 'utf8')
+    expect(changelogContent).toMatch(new RegExp(`${newVersion}`))
+  })
+
+  it('should update the Readme', async () => {
+    const readmeContent = await fs.readFile(fixture.paths.readme, 'utf8')
+    expect(readmeContent).toMatch(new RegExp(`${newVersion}`))
   })
 })

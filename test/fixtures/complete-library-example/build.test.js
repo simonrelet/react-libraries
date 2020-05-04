@@ -1,22 +1,32 @@
 'use strict'
 
 const path = require('path')
-const { cleanFixture, listFolderContent } = require('../../fixtureUtils')
-const { callScriptInPackage } = require('../../scriptExecution')
-const packageJSON = require('./package.json')
+const { Fixture } = require('../../fixtureUtils')
 
-describe(`${packageJSON.name} build`, () => {
+describe(`${path.basename(__dirname)} build`, () => {
+  let fixture
+
   beforeAll(async () => {
-    await cleanFixture(__dirname)
+    fixture = new Fixture(__dirname)
+    await fixture.initialize()
+  })
+
+  afterAll(async () => {
+    await fixture.reset()
   })
 
   it('should not fail', async () => {
-    const result = await callScriptInPackage(__dirname, 'build')
+    const result = await fixture.runScript('build', [
+      '-i',
+      'src/**/*.test.js',
+      '-c',
+      'src/**/*.d.ts',
+    ])
+
     expect(result).toMatchSnapshot()
   })
 
   it('should generate all files', async () => {
-    const files = await listFolderContent(path.join(__dirname, 'build'))
-    expect(files).toMatchSnapshot()
+    expect(await fixture.listFolderContent('build')).toMatchSnapshot()
   })
 })

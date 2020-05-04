@@ -411,7 +411,7 @@ function getNestedValue(object) {
 }
 `;
 
-exports[`supported-js-syntax build should transform each file to ES module 1`] = `
+exports[`supported-js-syntax build should transform each file to ES modules 1`] = `
 // async.js
 
 async function doStuff() {
@@ -481,7 +481,7 @@ function _otherStuff() {
 }
 `;
 
-exports[`supported-js-syntax build should transform each file to ES module 2`] = `
+exports[`supported-js-syntax build should transform each file to ES modules 2`] = `
 // ClassComponent.js
 
 import React from 'react'
@@ -553,7 +553,7 @@ export var ClassComponent = /*#__PURE__*/function (_React$Component) {
 }(React.Component);
 `;
 
-exports[`supported-js-syntax build should transform each file to ES module 3`] = `
+exports[`supported-js-syntax build should transform each file to ES modules 3`] = `
 // DefaultExport.js
 
 import React from 'react'
@@ -572,7 +572,7 @@ export default function DefaultExport() {
 }
 `;
 
-exports[`supported-js-syntax build should transform each file to ES module 4`] = `
+exports[`supported-js-syntax build should transform each file to ES modules 4`] = `
 // DynamicImport.js
 
 import React from 'react'
@@ -596,7 +596,7 @@ export function DynamicImport(props) {
 }
 `;
 
-exports[`supported-js-syntax build should transform each file to ES module 5`] = `
+exports[`supported-js-syntax build should transform each file to ES modules 5`] = `
 // LazyComponent.js
 
 import React from 'react'
@@ -615,7 +615,7 @@ export default function LazyComponent(props) {
 }
 `;
 
-exports[`supported-js-syntax build should transform each file to ES module 6`] = `
+exports[`supported-js-syntax build should transform each file to ES modules 6`] = `
 // FunctionComponent.js
 
 import PropTypes from 'prop-types'
@@ -672,7 +672,7 @@ FunctionComponent.defaultProps = {
 };
 `;
 
-exports[`supported-js-syntax build should transform each file to ES module 7`] = `
+exports[`supported-js-syntax build should transform each file to ES modules 7`] = `
 // nullishCoalescing.js
 
 export function nullishCoalescing(object) {
@@ -688,7 +688,7 @@ export function nullishCoalescing(object) {
 }
 `;
 
-exports[`supported-js-syntax build should transform each file to ES module 8`] = `
+exports[`supported-js-syntax build should transform each file to ES modules 8`] = `
 // optionalChaining.js
 
 export function getNestedValue(object) {

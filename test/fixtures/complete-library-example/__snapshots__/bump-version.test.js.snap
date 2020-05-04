@@ -5,6 +5,7 @@ Exit code: 0
 
 --- Output ---
 package.json -> package.json
+package-lock.json -> package-lock.json
 CHANGELOG.md -> CHANGELOG.md
 README-template.md -> README.md
 --------------

@@ -13,5 +13,9 @@ module.exports = {
     '<rootDir>\\/test\\/fixtures\\/.*\\/build\\/',
     '<rootDir>\\/test\\/fixtures\\/.*\\/node_modules\\/',
     '<rootDir>\\/test\\/fixtures\\/.*\\/coverage\\/',
+    '<rootDir>\\/test\\/fixtures\\/.*\\/README.md',
+    '<rootDir>\\/test\\/fixtures\\/.*\\/package.json',
+    '<rootDir>\\/test\\/fixtures\\/.*\\/package-lock.json',
+    '<rootDir>\\/test\\/fixtures\\/.*\\/CHANGELOG.md',
   ],
 }

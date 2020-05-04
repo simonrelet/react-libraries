@@ -4,10 +4,12 @@ exports[`complete-library-example build should generate all files 1`] = `
 Array [
   "cjs/Button/Button.js",
   "cjs/Button/index.js",
+  "cjs/index.d.ts",
   "cjs/index.js",
   "complete-library-example.css",
   "es/Button/Button.js",
   "es/Button/index.js",
+  "es/index.d.ts",
   "es/index.js",
 ]
 `;

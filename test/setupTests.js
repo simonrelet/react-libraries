@@ -1,7 +1,9 @@
 'use strict'
 
-const { FileCompilationSnapshotSerializer } = require('./fixtureUtils')
-const { ExecutionResultSnapshotSerializer } = require('./scriptExecution')
+const {
+  FileCompilationSnapshotSerializer,
+  ExecutionResultSnapshotSerializer,
+} = require('./fixtureUtils')
 
 expect.addSnapshotSerializer(FileCompilationSnapshotSerializer)
 expect.addSnapshotSerializer(ExecutionResultSnapshotSerializer)

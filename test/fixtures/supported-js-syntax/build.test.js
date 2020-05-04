@@ -1,50 +1,60 @@
 'use strict'
 
 const path = require('path')
-const {
-  cleanFixture,
-  listFolderContent,
-  createFileCompilation,
-} = require('../../fixtureUtils')
-const { callScriptInPackage } = require('../../scriptExecution')
-const packageJSON = require('./package.json')
+const { Fixture, createFileCompilation } = require('../../fixtureUtils')
 
-const MODULES = [
-  { name: 'CommonJS', folder: 'cjs' },
-  { name: 'ES module', folder: 'es' },
-]
+describe(`${path.basename(__dirname)} build`, () => {
+  let fixture
 
-describe(`${packageJSON.name} build`, () => {
   beforeAll(async () => {
-    await cleanFixture(__dirname)
+    fixture = new Fixture(__dirname)
+    await fixture.initialize()
+  })
+
+  afterAll(async () => {
+    await fixture.reset()
   })
 
   it('should not fail', async () => {
-    const result = await callScriptInPackage(__dirname, 'build')
+    const result = await fixture.runScript('build')
     expect(result).toMatchSnapshot()
   })
 
   it('should generate all files', async () => {
-    const files = await listFolderContent(path.join(__dirname, 'build'))
-    expect(files).toMatchSnapshot()
+    expect(await fixture.listFolderContent('build')).toMatchSnapshot()
   })
 
-  MODULES.forEach(({ name, folder }) => {
-    it(`should transform each file to ${name}`, async () => {
-      const files = await listFolderContent(path.join(__dirname, 'src'))
+  it('should transform each file to CommonJS', async () => {
+    const files = await fixture.listFolderContent('src')
 
-      const filesCompilation = await Promise.all(
-        files.map(async (file) =>
-          createFileCompilation(
-            path.join(__dirname, 'src', file),
-            path.join(__dirname, 'build', folder, file),
-          ),
+    const filesCompilation = await Promise.all(
+      files.map(async (file) =>
+        createFileCompilation(
+          path.join(fixture.paths.source, file),
+          path.join(fixture.paths.commonJSOutput, file),
         ),
-      )
+      ),
+    )
 
-      filesCompilation.forEach((fileCompilation) => {
-        expect(fileCompilation).toMatchSnapshot()
-      })
+    filesCompilation.forEach((fileCompilation) => {
+      expect(fileCompilation).toMatchSnapshot()
+    })
+  })
+
+  it('should transform each file to ES modules', async () => {
+    const files = await fixture.listFolderContent('src')
+
+    const filesCompilation = await Promise.all(
+      files.map(async (file) =>
+        createFileCompilation(
+          path.join(fixture.paths.source, file),
+          path.join(fixture.paths.esModuleOutput, file),
+        ),
+      ),
+    )
+
+    filesCompilation.forEach((fileCompilation) => {
+      expect(fileCompilation).toMatchSnapshot()
     })
   })
 })

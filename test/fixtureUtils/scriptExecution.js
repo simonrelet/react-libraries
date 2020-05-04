@@ -11,10 +11,10 @@ function createExecutionResult(exitCode, output) {
   return { $$type: OBJECT_TYPE, exitCode, output }
 }
 
-async function callScriptInPackage(packagePath, script, scriptsArgs = []) {
+async function callScriptInFixture(fixturePath, script, scriptsArgs = []) {
   try {
     const result = await execa.node(BIN_PATH, [script].concat(scriptsArgs), {
-      cwd: packagePath,
+      cwd: fixturePath,
       env: Object.assign({}, process.env, {
         // We don't want color codes in the snapshots.
         // https://github.com/chalk/chalk#chalksupportscolor
@@ -39,4 +39,4 @@ const ExecutionResultSnapshotSerializer = {
   },
 }
 
-module.exports = { ExecutionResultSnapshotSerializer, callScriptInPackage }
+module.exports = { ExecutionResultSnapshotSerializer, callScriptInFixture }

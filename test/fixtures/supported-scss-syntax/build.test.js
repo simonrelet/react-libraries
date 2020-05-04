@@ -2,26 +2,27 @@
 
 const fs = require('fs-extra')
 const path = require('path')
-const { cleanFixture } = require('../../fixtureUtils')
-const { callScriptInPackage } = require('../../scriptExecution')
-const packageJSON = require('./package.json')
+const { Fixture } = require('../../fixtureUtils')
 
-describe(`${packageJSON.name} build`, () => {
+describe(`${path.basename(__dirname)} build`, () => {
+  let fixture
+
   beforeAll(async () => {
-    await cleanFixture(__dirname)
+    fixture = new Fixture(__dirname)
+    await fixture.initialize()
+  })
+
+  afterAll(async () => {
+    await fixture.reset()
   })
 
   it('should not fail', async () => {
-    const result = await callScriptInPackage(__dirname, 'build')
+    const result = await fixture.runScript('build')
     expect(result).toMatchSnapshot()
   })
 
   it('should compile to CSS', async () => {
-    const compiledCSS = await fs.readFile(
-      path.resolve(__dirname, packageJSON.style),
-      'utf8',
-    )
-
+    const compiledCSS = await fs.readFile(fixture.paths.styleOutput, 'utf8')
     expect(compiledCSS).toMatchSnapshot()
   })
 })
