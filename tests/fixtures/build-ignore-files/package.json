@@ -1,0 +1,4 @@
+{
+  "main": "build/cjs",
+  "module": "build/es"
+}

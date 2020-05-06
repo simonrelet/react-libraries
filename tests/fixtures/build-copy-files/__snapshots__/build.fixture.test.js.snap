@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`build-copy-files build should not fail 1`] = `
+Exit code: 0
+
+--- Output ---
+$ react-libraries build -c 'src/**/*.copy.json'
+CommonJS build successful.
+ES modules build successful.
+--------------
+`;

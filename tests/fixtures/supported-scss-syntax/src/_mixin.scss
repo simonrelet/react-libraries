@@ -1,0 +1,13 @@
+@mixin test($color) {
+  background: $color;
+}
+
+.with-mixin-1 {
+  @include test(blue);
+  color: black;
+}
+
+.with-mixin-2 {
+  @include test(blue);
+  color: white;
+}
