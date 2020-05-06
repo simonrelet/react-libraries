@@ -2,10 +2,16 @@
 
 const fixture = require('../../setupTests')
 
-describe(`${fixture.fixtureName} build`, () => {
+describe(`${fixture.name} build`, () => {
   it('should not fail', async () => {
     const result = await fixture.runScript('build')
-    expect(result).toMatchSnapshot()
+
+    expect(result.exitCode).toEqual(0)
+    expect(result.output).toMatchInlineSnapshot(`
+      "$ react-libraries build
+      CommonJS build successful.
+      ES modules build successful."
+    `)
   })
 
   it('should generate all files', async () => {

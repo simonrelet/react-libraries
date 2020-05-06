@@ -3,10 +3,8 @@
 const execa = require('execa')
 const stripAnsi = require('strip-ansi')
 
-const OBJECT_TYPE = Symbol.for('script-execution-result-serializer')
-
 function createExecutionResult(exitCode, output) {
-  return { $$type: OBJECT_TYPE, exitCode, output }
+  return { exitCode, output: stripAnsi(output) }
 }
 
 async function callScriptInFixture(
@@ -18,12 +16,7 @@ async function callScriptInFixture(
   try {
     const result = await execa('yarnpkg', [script].concat(scriptArgs), {
       cwd: fixturePath,
-      env: Object.assign({}, process.env, {
-        // We don't want color codes in the snapshots.
-        // https://github.com/chalk/chalk#chalksupportscolor
-        FORCE_COLOR: false,
-        ...env,
-      }),
+      env: Object.assign({}, process.env, env),
 
       // stdout and stderr interleaved.
       all: true,
@@ -35,14 +28,4 @@ async function callScriptInFixture(
   }
 }
 
-const ExecutionResultSnapshotSerializer = {
-  test: (val) => val != null && val.$$type === OBJECT_TYPE,
-
-  print: ({ exitCode, output }) => {
-    return `Exit code: ${exitCode}\n\n--- Output ---\n${stripAnsi(
-      output
-    )}\n--------------`
-  },
-}
-
-module.exports = { ExecutionResultSnapshotSerializer, callScriptInFixture }
+module.exports = { callScriptInFixture }

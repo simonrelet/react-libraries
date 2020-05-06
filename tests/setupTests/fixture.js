@@ -17,7 +17,7 @@ async function writeDefaultPackageJson(packageJsonPath, packageName) {
   packageJson.name = packageName
 
   packageJson.devDependencies = Object.assign({}, packageJson.devDependencies, {
-    [PACKAGE_NAME]: `file:${path.resolve(__dirname, '../..')}`,
+    [PACKAGE_NAME]: 'latest',
   })
 
   packageJson.scripts = Object.assign({}, packageJson.scripts, {
@@ -35,18 +35,9 @@ async function writeDefaultPackageJson(packageJsonPath, packageName) {
 
 module.exports = class Fixture {
   constructor(fixturePath) {
-    this.fixtureName = path.basename(fixturePath)
-
-    this.paths = {
-      root: fixturePath,
-      testDirectory: null,
-      // packageJson: null,
-      // packageLock: null,
-      // changelog: null,
-      // readme: null,
-      // source: null,
-      // output: null,
-    }
+    this.fixturePath = fixturePath
+    this.name = path.basename(fixturePath)
+    this.testDirectory = null
 
     this.setup = this.setup.bind(this)
     this.teardown = this.teardown.bind(this)
@@ -57,45 +48,35 @@ module.exports = class Fixture {
   async setup() {
     await this.teardown()
 
-    this.paths.testDirectory = tempy.directory()
+    this.testDirectory = tempy.directory()
 
-    // this.paths.packageJson = path.join(testDirectory, 'package.json')
-    // this.paths.packageLock = path.join(testDirectory, 'package-lock.json')
-    // this.paths.changelog = path.join(testDirectory, 'CHANGELOG.md')
-    // this.paths.readme = path.join(testDirectory, 'README.md')
-    // this.paths.source = path.join(testDirectory, 'src')
-    // this.paths.output = path.join(testDirectory, 'build')
-
-    await fs.copy(this.paths.root, this.paths.testDirectory)
+    await fs.copy(this.fixturePath, this.testDirectory)
 
     await writeDefaultPackageJson(
-      path.join(this.paths.testDirectory, 'package.json'),
-      this.fixtureName
+      path.join(this.testDirectory, 'package.json'),
+      this.name
     )
 
     await execa('yarnpkg', ['install', '--enable-pnp', '--mutex', 'network'], {
-      cwd: this.paths.testDirectory,
+      cwd: this.testDirectory,
     })
+
+    await execa('yarnpkg', ['link', PACKAGE_NAME], { cwd: this.testDirectory })
   }
 
   async teardown() {
-    if (this.paths.testDirectory != null) {
-      await fs.remove(this.paths.testDirectory)
-      this.paths.testDirectory = null
+    if (this.testDirectory != null) {
+      await fs.remove(this.testDirectory)
+      this.testDirectory = null
     }
   }
 
   async runScript(script, args, options) {
-    return await callScriptInFixture(
-      this.paths.testDirectory,
-      script,
-      args,
-      options
-    )
+    return await callScriptInFixture(this.testDirectory, script, args, options)
   }
 
   async listFolderContent(folder) {
-    const absoluteFolder = path.join(this.paths.testDirectory, folder)
+    const absoluteFolder = path.join(this.testDirectory, folder)
 
     const filesPath = await glob(path.join(absoluteFolder, '**'), {
       nodir: true,

@@ -2,6 +2,8 @@
 
 module.exports = {
   testEnvironment: 'node',
-  testMatch: ['<rootDir>/tests/**/*.fixture.test.js'],
-  setupFilesAfterEnv: ['<rootDir>/tests/setupTests/setupJest.js'],
+  testMatch: [
+    // Support fixture.test.js and prefix.fixture.test.js
+    '<rootDir>/tests/**/?(*.)fixture.test.js',
+  ],
 }
