@@ -11,7 +11,12 @@ function createExecutionResult(exitCode, output) {
   return { $$type: OBJECT_TYPE, exitCode, output }
 }
 
-async function callScriptInFixture(fixturePath, script, scriptsArgs = []) {
+async function callScriptInFixture(
+  fixturePath,
+  script,
+  scriptsArgs = [],
+  { env = {} } = {}
+) {
   try {
     const result = await execa.node(BIN_PATH, [script].concat(scriptsArgs), {
       cwd: fixturePath,
@@ -19,6 +24,7 @@ async function callScriptInFixture(fixturePath, script, scriptsArgs = []) {
         // We don't want color codes in the snapshots.
         // https://github.com/chalk/chalk#chalksupportscolor
         FORCE_COLOR: false,
+        ...env,
       }),
 
       // stdout and stderr interleaved.

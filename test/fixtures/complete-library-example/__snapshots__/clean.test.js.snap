@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`complete-library-example clean should not fail 1`] = `
+Exit code: 0
+
+--- Output ---
+Deleted files: build, build-storybook, coverage, custom-folder.
+--------------
+`;

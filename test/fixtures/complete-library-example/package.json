@@ -8,23 +8,5 @@
   },
   "main": "build/cjs",
   "module": "build/es",
-  "style": "build/complete-library-example.css",
-  "scripts": {
-    "react-libraries": "node ../../../bin/react-libraries",
-    "build": "yarn react-libraries build-i \"src/**/*.doc.js\" -c \"src/**/*.ts\"",
-    "build:clean": "run-s clean build",
-    "bump-version": "yarn react-libraries bump-version",
-    "clean": "yarn react-libraries clean",
-    "readme": "yarn react-libraries readme",
-    "start": "run-s \"build -w\"",
-    "test": "yarn react-libraries test --env=jsdom"
-  },
-  "scriptsArgs": {
-    "build": [
-      "-i",
-      "\"src/**/*.doc.js\"",
-      "-c",
-      "\"src/**/*.ts\""
-    ]
-  }
+  "style": "build/complete-library-example.css"
 }

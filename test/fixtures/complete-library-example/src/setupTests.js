@@ -1,1 +1,1 @@
-global.__SETUP_CALLED__ = true
+import '@testing-library/jest-dom'

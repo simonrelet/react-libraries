@@ -103,9 +103,9 @@ class Fixture {
     return filesPath.map((filePath) => path.relative(absoluteFolder, filePath))
   }
 
-  async runScript(script, args) {
+  async runScript(script, args, options) {
     this._hasRun[script] = true
-    return await callScriptInFixture(this.paths.root, script, args)
+    return await callScriptInFixture(this.paths.root, script, args, options)
   }
 }
 

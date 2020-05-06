@@ -2,6 +2,8 @@ import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import React from 'react'
 
+export const ButtonVariants = ['default', 'primary', 'secondary']
+
 export function Button({ variant, className, ...rest }) {
   return (
     <button
@@ -12,10 +14,10 @@ export function Button({ variant, className, ...rest }) {
 }
 
 Button.propTypes = {
-  variant: PropTypes.oneOf(['default', 'primary', 'secondary']),
+  variant: PropTypes.oneOf(ButtonVariants),
   className: PropTypes.string,
 }
 
 Button.defaultProps = {
-  variant: 'default',
+  variant: ButtonVariants[0],
 }
